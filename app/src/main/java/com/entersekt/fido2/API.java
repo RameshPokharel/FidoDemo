@@ -14,5 +14,9 @@ import retrofit2.http.POST;
 public interface API {
     @Headers({"Accept: application/json", "Content-Type: application/json"})
     @POST("tests/fido2/attestation/options")//https://devapi.singularkey.com/tests/fido2/attestation/options
-    Call<ResponseBody> getResult(@Body RequestBody loginPostBody);
+    Call<ResponseBody> getResult(@Body RequestBody body);
+
+    @Headers({"Accept: application/json", "Content-Type: application/json"})
+    @POST("tests/fido2/attestation/options")//https://devapi.singularkey.com/tests/fido2/attestation/options
+    Call<ResponseBody> getResultNew(@Header("Cookie")String cookie,@Body RequestBody body);
 }

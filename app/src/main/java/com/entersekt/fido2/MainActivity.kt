@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         result.put("username", "test1")
         val requestBody = RequestBody.create(mediaType, result.toString())
 
-        RestApi.getApi().getResult(requestBody).enqueue(object : Callback<ResponseBody> {
+        RestApi.getApi().getResultNew("username=ramesh",requestBody).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     var obj = JSONObject(response.body()?.string())
