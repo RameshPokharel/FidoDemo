@@ -75,23 +75,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun getChallenge() {
 
-        val cookieManager = CookieManager()
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
-        val okHttpClientBuilder = OkHttpClient().newBuilder() //create OKHTTPClient
-        okHttpClientBuilder.cookieJar(JavaNetCookieJar(cookieManager));
-        val okHttpClient = okHttpClientBuilder
-            .build()
-
-        val retrofit =
-            Retrofit.Builder().client(okHttpClient)
-                .baseUrl("https://devapi.singularkey.com/").build().create(API::class.java)
 
         val result = JSONObject()
         val mediaType = MediaType.parse("application/json")
         result.put("username", "test1")
         val requestBody = RequestBody.create(mediaType, result.toString())
 
-        retrofit.getResult(requestBody).enqueue(object : Callback<ResponseBody> {
+        RestApi.getApi().getResult(requestBody).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     var obj = JSONObject(response.body()?.string())
