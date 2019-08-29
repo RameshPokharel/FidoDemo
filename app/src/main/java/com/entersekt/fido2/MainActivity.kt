@@ -11,18 +11,18 @@ import androidx.core.content.edit
 import com.google.android.gms.fido.Fido
 import com.google.android.gms.fido.fido2.api.common.*
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
+import okhttp3.*
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.CookieManager
+import java.net.CookiePolicy
 import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
+import java.net.CookiePolicy.ACCEPT_ALL
 
 
 class MainActivity : AppCompatActivity() {
@@ -74,8 +74,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getChallenge() {
-        val okHttpClient = OkHttpClient().newBuilder()
+
+        val cookieManager = CookieManager()
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+        val okHttpClientBuilder = OkHttpClient().newBuilder() //create OKHTTPClient
+        okHttpClientBuilder.cookieJar(JavaNetCookieJar(cookieManager));
+        val okHttpClient = okHttpClientBuilder
             .build()
+
         val retrofit =
             Retrofit.Builder().client(okHttpClient)
                 .baseUrl("https://devapi.singularkey.com/").build().create(API::class.java)
@@ -118,7 +124,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    
     private fun registerFido2(
         rpId: String,
         rpname: String,
